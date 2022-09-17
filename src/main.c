@@ -19,12 +19,12 @@ void TIM1_CC_IRQHandler(void)
         primera_captura = false;
     }
     diferencia = primer_valor - segundo_valor;
-    frecuencia = 1 / diferencia;
+    frecuencia = SystemCoreClock / diferencia;
 }
 
 int main(void){
     Reloj_init();
-    Frecuencimetro_init();
+    Timer_init();
     while(1){
         /* Debemos mostrar la frecuencia en el monitor/LCD16x2*/
         

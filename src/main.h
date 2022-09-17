@@ -6,5 +6,5 @@
 #include "stm32f1xx.h"
 
 void Reloj_init(void);
-void Frecuencimetro_init(void);
+void Timer_init(void);
 #endif
