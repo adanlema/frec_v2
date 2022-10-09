@@ -4,7 +4,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "stm32f1xx.h"
+#include <reloj.h>
+#include "frecuencimetro.h"
+#include <lcd.h>
 
-void Reloj_init(void);
-void Timer_init(void);
+
+
+int main(void);
+
 #endif

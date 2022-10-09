@@ -1,5 +1,5 @@
+#include "frecuencimetro.h"
 #include <stm32f1xx.h>
-#include <main.h>
 
 #define INLINE inline __attribute__((always_inline))
 
@@ -64,8 +64,42 @@ INLINE void inicializa__Timer(void)
     while(!(TIM1->SR & TIM_SR_UIF)) continue; // Espera actualización
     limpiar_banderaAct();}
 
-void Timer_init(void)
+void frecuencimetro_init(void)
 {
     inicializa__Puerto();
     inicializa__Timer();
+}
+
+
+static volatile struct EstadoFrecuencimetro{
+    int32_t anterior;
+    bool anterior_valido;
+    bool lectura_valida;
+    int32_t diferencia;
+    int32_t frecuencia;
+} estado = {0,false,false,0,0};
+
+void TIM1_CC_IRQHandler(void)
+{
+    //debemos configurar nuestro programa, donde debemos leer de TIMX_CCR1.
+    if (TIM1->SR & (1<<1)){
+        if (estado.anterior_valido == false){
+            estado.anterior = TIM1->CCR1;
+            estado.anterior_valido = true;
+            }
+        else {
+            uint32_t actual = TIM1->CCR1;
+            estado.diferencia = actual - estado.anterior;
+            estado.frecuencia = SystemCoreClock / estado.diferencia;
+            estado.anterior = actual;
+            estado.lectura_valida = true;
+            }
+        TIM1->SR = (TIM1->SR & ~(1<<1));
+    }
+    
+}
+
+Lectura frecuencimetro_get_frecuencia(void)
+{
+    return (Lectura){.valida = estado.lectura_valida,.valor = estado.frecuencia};
 }

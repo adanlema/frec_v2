@@ -2,6 +2,8 @@
     "files.associations": {
         "stm32f1xx.h": "c",
         "main.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "reloj.h": "c",
+        "stdio.h": "c"
     }
 }

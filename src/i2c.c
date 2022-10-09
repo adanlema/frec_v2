@@ -1,9 +1,8 @@
-#include <stm32f1xx.h>
-#include <main.h>
+#include <i2c.h>
 #define INLINE inline __attribute__((always_inline))
 
 
-INLINE void habilitar_I2CGPIO(void){
+INLINE void habilitar_I2CGPIOB(void){
     RCC->APB1ENR |= (1<<21);
     RCC->APB2ENR |= (1<<3);}        
 INLINE void confGPIOB_modopines(void){
@@ -39,12 +38,14 @@ INLINE void I2C_borrarReconocimiento(void){
     I2C1->CR1 &= ~(1<<10);}
 INLINE void I2C_esperarRecepcionRegistrodeDatosvacio(void){
     while(!(I2C1->SR1 & (1<<6))) continue;}
+static void I2C_SubirDatos(uint8_t data){
+    I2C1->DR = ((I2C1->DR&~0b11111111)|data);}
 
 
 
 static void conf__GPIOB(void)
 {   
-    habilitarI2CGPIO();
+    habilitar_I2CGPIOB();
     confGPIOB_modopines();
     confGPIOB_confpines();
     confAFIO_AltFunc();}
@@ -56,7 +57,7 @@ static void conf__I2C(void){
     confI2C_habilitarPeriferico();}
 void I2C__init(void){
     conf__GPIOB();
-    conf__I2c();}
+    conf__I2C();}
 
 
 void I2C__start(void){
@@ -64,8 +65,6 @@ void I2C__start(void){
     I2C_start();}
 
 
-static void I2C_SubirDatos(uint8_t data){
-    I2C1->DR = ((I2C1->DR&~0b11111111)|data);}
 void I2C__write(uint8_t data){
     I2C_esperarTransmisionRegistrodeDatosvacio();
     I2C_SubirDatos(data);

@@ -1,6 +1,4 @@
-#include <stm32f1xx.h>
-#include<main.h> 
-
+#include <reloj.h>
 #define INLINE inline __attribute__((always_inline))
 
 enum {  CR_HSE_ON           = (1UL<<16),
@@ -21,7 +19,7 @@ INLINE void esperaImpacteSeleccionHse(void){
 INLINE void actualizaVariable_SystemCoreClock(void){
     SystemCoreClockUpdate();}
 
-void Reloj_init(void)
+void Reloj__init(void)
 {
     activaHse();
     esperaHseListo();
