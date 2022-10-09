@@ -4,6 +4,6 @@
 #include <stm32f1xx.h>
 #include <main.h>
 
-void Reloj__init(void);
+void reloj_init(void);
 
 #endif

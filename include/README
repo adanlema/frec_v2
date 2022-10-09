@@ -1,6 +1,11 @@
-Pines a utilizar:
+    # Frecuencimetro de dos Canales
+    El proyecto consiste en realizar un frecuencimetro con el micro STM32f103, el cual debe contener
+dos canales y debe mostrar el valor de la frecuencia en un lcd1602. Utilizamos los pines de la
+placa de desarrolo bluepill:
 
-PA8     -> Timer1
+PA8     -> TIM1
 PA0-7   -> Bits de datos
 PB10-11 -> Enable y RS
 
+    Usaremos el TIM1 para la medicion de la frecuencia de la señal y el TIM6 para realizar retardos
+de tiempo precisos.

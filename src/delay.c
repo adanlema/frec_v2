@@ -8,7 +8,7 @@
 INLINE void tim6_enable(void){
     RCC->APB1ENR |= (1<<4);}
 INLINE void tim6_delay1us(void){
-    TIM6->PSC = 90-1;
+    TIM6->PSC = 8-1;
     TIM6->ARR = 0xffff;    }
 INLINE void tim6_enableCounter(void){
     TIM6->CR1 |= (1<<0);}
@@ -22,7 +22,7 @@ static void tim6_conf(void){
 
 
 
-void TIM6_init(){
+void tim6_init(){
     tim6_conf();}
 
 

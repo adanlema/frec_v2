@@ -3,12 +3,12 @@
 
 int main(void){
 
-    Reloj__init();
+    reloj_init();
     frecuencimetro_init();
+    tim6_init();
     lcd_init();
     lcd_escribir("Frec1: ",0,0);
     lcd_escribir("Frec2: ",1,0);
-
 
 
     while(1){

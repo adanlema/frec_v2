@@ -27,8 +27,8 @@ INLINE void conexionCHANNELTIM1(void){
     TIM1->CR2 &= ~TIM_CR2_TI1S;}
 INLINE void confParametros(void){
     TIM1->CNT = 0;
-    TIM1->PSC = 0;
-    TIM1->ARR = 0;
+    TIM1->PSC = 20-1;
+    TIM1->ARR = 0xffff;
     TIM1->RCR = 0;}
 INLINE void conf_Registros(void){
     habilitarTIM1();
