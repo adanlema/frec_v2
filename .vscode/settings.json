@@ -4,7 +4,8 @@
         "main.h": "c",
         "stdbool.h": "c",
         "reloj.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stm32f103xb.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
