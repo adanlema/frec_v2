@@ -2,6 +2,7 @@
 #include<stdbool.h>
 #include <stm32f1xx.h>
 #include "stm32f10x.h"
+#include "delay.h"
 #define INLINE inline __attribute__((always_inline))
 
 
