@@ -5,8 +5,8 @@
 
 INLINE void inicializa__Puerto(void){
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
-    GPIOA->CRH = (GPIOA->CRH & ~(GPIO_CRH_CNF8_Msk | GPIO_CRH_MODE8_Msk)) | (GPIO_CRH_CNF8_0);}
-
+    GPIOA->CRH = (GPIOA->CRH & ~(GPIO_CRH_CNF8_Msk | GPIO_CRH_MODE8_Msk)) | (GPIO_CRH_CNF8_0);
+    GPIOA->CRH = (GPIOA->CRH & ~(0b1111 << 4)) | (0b0100 << 4);}
 
 INLINE void limpiar_banderaAct(void){
     TIM1->SR &= ~TIM_SR_UIF;}
@@ -41,18 +41,22 @@ INLINE void conf_Registros(void){
 
 
 INLINE void confTIM1comoIC(void){
-    TIM1->CCMR1 = (TIM1->CCMR1 & ~TIM_CCMR1_CC1S_Msk) | TIM_CCMR1_CC1S_0;}
+    TIM1->CCMR1 = (TIM1->CCMR1 & ~TIM_CCMR1_CC1S_Msk) | TIM_CCMR1_CC1S_0;
+    TIM1->CCMR1 = (TIM1->CCMR1 & ~(0b11<<8)) | (1<<8);}
 INLINE void confFlancoAsc(void){
-    TIM1->CCER &= ~TIM_CCER_CC1P;}
+    TIM1->CCER &= ~TIM_CCER_CC1P;
+    TIM1->CCER &= ~(1<<5);}
 INLINE void habilitarICTIM1(void){
-    TIM1->CCER  |= TIM_CCER_CC1E;}    
+    TIM1->CCER |= TIM_CCER_CC1E;
+    TIM1->CCER |=(1<<4);}    
 INLINE void conf_IC(void){
     confTIM1comoIC();
     confFlancoAsc();
     habilitarICTIM1();}
 
 INLINE void habilitarInterrupcionIC(void){
-    TIM1->DIER |= TIM_DIER_CC1IE;}
+    TIM1->DIER |= TIM_DIER_CC1IE;
+    TIM1->DIER |= (1<<2);}
 
 
 INLINE void inicializa__Timer(void)
