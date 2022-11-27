@@ -18,6 +18,11 @@ int main(void){
         }else{
             lcd_escribir("N/A",0,7);
         }
+        if(frecuencia.valida2){
+            lcd_escribir(frecuencia.valor2,1,7);
+        }else{
+            lcd_escribir("N/A",1,7);
+        }
     }
     return 0;
 }

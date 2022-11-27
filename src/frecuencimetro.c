@@ -76,34 +76,52 @@ void frecuencimetro_init(void)
 
 
 static volatile struct EstadoFrecuencimetro{
-    int32_t anterior;
-    bool anterior_valido;
-    bool lectura_valida;
+    int32_t anterior1;
+    int32_t anterior2;
+    bool anterior_valido1;
+    bool anterior_valido2;
+    bool lectura_valida1;
+    bool lectura_valida2;
     int32_t diferencia;
-    int32_t frecuencia;
-} estado = {0,false,false,0,0};
+    int32_t frecuencia1;
+    int32_t frecuencia2;
+} estado = {0,0,false,false,false,false,0,0,0};
 
 void TIM1_CC_IRQHandler(void)
 {
     //debemos configurar nuestro programa, donde debemos leer de TIMX_CCR1.
     if (TIM1->SR & (1<<1)){
-        if (estado.anterior_valido == false){
-            estado.anterior = TIM1->CCR1;
-            estado.anterior_valido = true;
+        if (estado.anterior_valido1 == false){
+            estado.anterior1 = TIM1->CCR1;
+            estado.anterior_valido1 = true;
             }
         else {
             uint32_t actual = TIM1->CCR1;
-            estado.diferencia = actual - estado.anterior;
-            estado.frecuencia = SystemCoreClock / estado.diferencia;
-            estado.anterior = actual;
-            estado.lectura_valida = true;
+            estado.diferencia = actual - estado.anterior1;
+            estado.frecuencia1 = SystemCoreClock / estado.diferencia;
+            estado.anterior1 = actual;
+            estado.lectura_valida1 = true;
             }
+        
+        if (estado.anterior_valido2 == false){
+            estado.anterior2 = TIM1->CCR2;
+            estado.anterior_valido2 = true;
+            }
+        else {
+            uint32_t actual2 = TIM1->CCR1;
+            estado.diferencia = actual2 - estado.anterior2;
+            estado.frecuencia2 = SystemCoreClock / estado.diferencia;
+            estado.anterior2 = actual2;
+            estado.lectura_valida2 = true;
+            }
+        
         TIM1->SR = (TIM1->SR & ~(1<<1));
+
     }
     
 }
 
 Lectura frecuencimetro_get_frecuencia(void)
 {
-    return (Lectura){.valida = estado.lectura_valida,.valor = estado.frecuencia};
+    return (Lectura){.valida = estado.lectura_valida1,.valor = estado.frecuencia1, .valida2 = estado.lectura_valida2, .valor2=estado.frecuencia2};
 }

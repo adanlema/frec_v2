@@ -25,7 +25,7 @@ INLINE void usart_wordlength(void){
 INLINE void usart_1bitstop(void){
     USART1->CR2 = (USART1->CR2 & ~(3<<12)) | (2<<12);}
 INLINE void usart_baudrate(void){
-    USART1->BRR &= ~(0xf<<0);}
+    USART1->BRR = (7<<0) | (24<<4);}
 INLINE void usart_TE(bool valor){
     if(valor) USART1->CR1 |= (1<<3);
     else      USART1->CR1 &=  ~(1<<3);}

@@ -7,5 +7,8 @@ PA8     -> TIM1
 PA0-7   -> Bits de datos
 PB10-11 -> Enable y RS
 
+USART usamos:
+PB6,PB7  -> USART1
+
     Usaremos el TIM1 para la medicion de la frecuencia de la señal y el TIM6 para realizar retardos
 de tiempo precisos.

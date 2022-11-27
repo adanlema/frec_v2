@@ -7,6 +7,8 @@
 typedef struct Lectura{
     bool valida;
     uint32_t valor;
+    bool valida2;
+    uint32_t valor2;
 }Lectura;
 
 
