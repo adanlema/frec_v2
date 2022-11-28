@@ -6,7 +6,7 @@
 
 
 INLINE void tim2_enable(void){
-    RCC->APB1ENR |= (1<<4);}
+    RCC->APB1ENR |= (1<<0);}
 INLINE void tim2_delay1us(void){
     TIM2->PSC = 8-1;
     TIM2->ARR = 0xffff;    }

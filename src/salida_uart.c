@@ -32,15 +32,22 @@ INLINE void usart_TE(bool valor){
 INLINE void usart_writebyte(unsigned char data){
     while(!(USART1->CR1 & (1<<7))) continue;
     USART1->DR = ((USART1->DR & ~(0xff)) | data);
-    while(!(USART1->CR1 & (1<<6))) continue;
-}
+    while(!(USART1->CR1 & (1<<6))) continue;}
+INLINE void usart_confPIN(void){
+    AFIO->MAPR |= (1<<2);                                       // PB6 ^ PB7
+    GPIOB->CRL = (GPIOB->CRL & ~(0xf<<24)) | (0b1010<<24);      // PB6 TX - push-pull
+    GPIOB->CRL = (GPIOB->CRL & ~(0xf<<28)) | (0b0100<<28);}     // PB7 RX - entrada flotante
+
 
 
 void usart_config(void){
     usart_enable();
     usart_wordlength();
     usart_1bitstop();
-    usart_baudrate();}
+    usart_baudrate();
+    usart_confPIN();}
+
+
 
 void usart_write(unsigned char *palabra){
     usart_TE(true);
