@@ -41,21 +41,21 @@ INLINE void conf_Registros(void){
 
 
 INLINE void confTIM1comoIC(void){
-    TIM1->CCMR1 = (TIM1->CCMR1 & ~TIM_CCMR1_CC1S_Msk) | TIM_CCMR1_CC1S_0;
-    TIM1->CCMR1 = (TIM1->CCMR1 & ~(0b11<<8)) | (1<<8);}
+    TIM1->CCMR1 = (TIM1->CCMR1 & ~(0b11<<0)) | (1<<0);              // Input Capture CHANNEL1
+    TIM1->CCMR1 = (TIM1->CCMR1 & ~(0b11<<8)) | (1<<8);}             // Input Capture CHANNEL2
 INLINE void confFlancoAsc(void){
-    TIM1->CCER &= ~TIM_CCER_CC1P;
-    TIM1->CCER &= ~(1<<5);}
+    TIM1->CCER &= ~(1<<1);                                          // Rising Edge CHANNEL1
+    TIM1->CCER &= ~(1<<5);}                                         // Rising Edge CHANNEL2
 INLINE void habilitarICTIM1(void){
-    TIM1->CCER |= TIM_CCER_CC1E;
-    TIM1->CCER |=(1<<4);}    
+    TIM1->CCER |=(1<<0);                                            // CHANNEL 1
+    TIM1->CCER |=(1<<4);}                                           // CHANNEL 2
 INLINE void conf_IC(void){
     confTIM1comoIC();
     confFlancoAsc();
     habilitarICTIM1();}
 
 INLINE void habilitarInterrupcionIC(void){
-    TIM1->DIER |= TIM_DIER_CC1IE;
+    TIM1->DIER |= (1<<1);
     TIM1->DIER |= (1<<2);}
 
 
@@ -75,53 +75,47 @@ void frecuencimetro_init(void)
 }
 
 
-static volatile struct EstadoFrecuencimetro{
-    int32_t anterior1;
-    int32_t anterior2;
-    bool anterior_valido1;
-    bool anterior_valido2;
-    bool lectura_valida1;
-    bool lectura_valida2;
-    int32_t diferencia;
-    int32_t frecuencia1;
-    int32_t frecuencia2;
-} estado = {0,0,false,false,false,false,0,0,0};
+typedef struct {
+    int32_t anterior = 0;
+    bool anterior_valido = false;
+    bool lectura_valida = false;
+    int32_t diferencia = 0;
+    int32_t frecuencia = 0;
+} estado_Canal;
+
+estado_Canal CH1;
+estado_Canal CH2;
 
 void TIM1_CC_IRQHandler(void)
 {
     //debemos configurar nuestro programa, donde debemos leer de TIMX_CCR1.
     if (TIM1->SR & (1<<1)){
-        if (estado.anterior_valido1 == false){
-            estado.anterior1 = TIM1->CCR1;
-            estado.anterior_valido1 = true;
-            }
+        if (CH1.anterior_valido == false){
+            CH1.anterior = TIM1->CCR1;
+            CH1.anterior_valido = true;}
         else {
-            uint32_t actual = TIM1->CCR1;
-            estado.diferencia = actual - estado.anterior1;
-            estado.frecuencia1 = SystemCoreClock / estado.diferencia;
-            estado.anterior1 = actual;
-            estado.lectura_valida1 = true;
-            }
-        
-        if (estado.anterior_valido2 == false){
-            estado.anterior2 = TIM1->CCR2;
-            estado.anterior_valido2 = true;
-            }
-        else {
-            uint32_t actual2 = TIM1->CCR1;
-            estado.diferencia = actual2 - estado.anterior2;
-            estado.frecuencia2 = SystemCoreClock / estado.diferencia;
-            estado.anterior2 = actual2;
-            estado.lectura_valida2 = true;
-            }
-        
-        TIM1->SR = (TIM1->SR & ~(1<<1));
-
-    }
+            uint32_t actual1 = TIM1->CCR1;
+            CH1.diferencia = actual1 - CH1.anterior;
+            CH1.frecuencia = 400000 / CH1.diferencia;
+            CH1.anterior = actual1;
+            CH1.lectura_valida = true; } 
+        TIM1->SR = (TIM1->SR & ~(1<<1));}
     
+    if (TIM1->SR & (1<<2)){
+        if (CH2.anterior_valido == false){
+            CH2.anterior = TIM1->CCR2;
+            CH2.anterior_valido = true;}
+        else {
+            uint32_t actual2 = TIM1->CCR2;
+            CH2.diferencia = actual2 - CH2.anterior;
+            CH2.frecuencia = 400000 / CH2.diferencia;
+            CH2.anterior = actual2;
+            CH2.lectura_valida = true;}
+        TIM1->SR = (TIM1->SR & ~(1<<2));}
 }
 
-Lectura frecuencimetro_get_frecuencia(void)
-{
-    return (Lectura){.valida = estado.lectura_valida1,.valor = estado.frecuencia1, .valida2 = estado.lectura_valida2, .valor2=estado.frecuencia2};
-}
+Lectura frecuencimetro_get_frecuencia1(void){
+    return (Lectura){.valida = CH1.lectura_valida,.valor = CH1.frecuencia};}
+
+Lectura frecuencimetro_get_frecuencia2(void){
+    return (Lectura){.valida = CH2.lectura_valida,.valor = CH2.frecuencia};}

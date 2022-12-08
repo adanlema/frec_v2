@@ -3,7 +3,7 @@
 dos canales y debe mostrar el valor de la frecuencia en un lcd1602. Utilizamos los pines de la
 placa de desarrolo bluepill:
 
-PA8     -> TIM1
+PA8,PA9     -> TIM1 CH1 y CH2
 PA0-7   -> Bits de datos
 PB10-11 -> Enable y RS
 
