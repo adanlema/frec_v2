@@ -32,7 +32,7 @@ static void lcd_escribir_byte(unsigned char Data){
     bits_NULL();
     GPIOA->BSRR |= Data;
     comando_EN();}
-static void lcd_comand_escribir(unsigned char Data){
+INLINE void lcd_comand_escribir(unsigned char Data){
     comando_RS(false);
     bits_NULL();
     GPIOA->BSRR |= Data;

@@ -75,16 +75,16 @@ void frecuencimetro_init(void)
 }
 
 
-typedef struct {
-    int32_t anterior = 0;
-    bool anterior_valido = false;
-    bool lectura_valida = false;
-    int32_t diferencia = 0;
-    int32_t frecuencia = 0;
+typedef struct{
+    int32_t anterior;
+    bool anterior_valido;
+    bool lectura_valida;
+    int32_t diferencia;
+    int32_t frecuencia;
 } estado_Canal;
 
-estado_Canal CH1;
-estado_Canal CH2;
+estado_Canal CH1 = {0,false,false,0,0};
+estado_Canal CH2 = {0,false,false,0,0};
 
 void TIM1_CC_IRQHandler(void)
 {

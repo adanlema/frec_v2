@@ -4,11 +4,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "stm32f1xx.h"
-#include "stm32f10x.h"
 #include <reloj.h>
 #include "frecuencimetro.h"
 #include <lcd.h>
 #include <delay.h>
+#include <salida_uart.h>
 
 
 
