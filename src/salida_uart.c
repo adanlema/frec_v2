@@ -14,6 +14,7 @@ the USART is disabled or enters the Halt mode to avoid corrupting the last trans
 
 #include <stm32f1xx.h>
 #include <stdbool.h>
+#include "salida_uart.h"
 #define INLINE inline __attribute__((always_inline))
 
 INLINE void usart_confPIN(void){
@@ -58,6 +59,23 @@ uint8_t usart_getchar(void){
     datousart = USART1->DR;
     return datousart;
 }
+
+//void USART1_IRQHandler (void){}
+
+PuertoU uart_transmitir (void){
+    PuertoU U1;
+    uint32_t dato;
+
+    if (USART1->SR & (1<<5)){
+        dato = USART1->DR;
+        if(dato == "F1" || dato == "F2") {
+            U1.estado = true;
+            U1.palabra = USART1->DR;}
+        else U1.estado = false;}
+    else {
+        U1.estado = false;
+        U1.palabra = 0;}
+    return U1;}
 
 
 
