@@ -87,7 +87,7 @@ void lcd_inicio(void){
     lcd_comand_escribir(0x07);
     lcd_comand_escribir(0x0d);
     lcd_escribir("Frecuencimetro",0,1);
-    lcd_escribir("Frecuencimetro",1,1);
+    lcd_escribir("Lema, Adan",1,1);
     delay_ms(2000);
 }
 
