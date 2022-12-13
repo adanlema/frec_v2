@@ -2,13 +2,27 @@
 #include <stdio.h>
 
 int main(void){
-
+    
     reloj_init();
     tim2_init();
+    
+    /* //Rutina para encender el LED_C13
+    RCC->APB2ENR |= (1<<4);
+    GPIOC->CRH = (GPIOC->CRH & ~(0xF << 20)) | (2<<20);
+    while(1){
+            GPIOC->BSRR |= (1<<13);
+            delay_ms(3000);
+            GPIOC->BRR |= (1<<13);
+            delay_ms(1000);} */
+    
+    lcd_inicio();
+    lcd_escribir("Frecuencimetro",0,0);
+    lcd_escribir("Lema, Adan J.A.",1,0);
+    delay_ms(5000);
+    lcd_clear();
+
     frecuencimetro_init();
     usart_config();
-    lcd_inicio();
-    //lcd_init();
     lcd_escribir("Frec1: ",0,0);
     lcd_escribir("Frec2: ",1,0);
 
@@ -33,7 +47,6 @@ int main(void){
 
         if (U1.estado){
             if(U1.palabra == "F1") usart_sendstring(F1);
-            else usart_sendstring(F2);}
-    }
+            else usart_sendstring(F2);}}
     return 0;
 }

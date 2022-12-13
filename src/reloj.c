@@ -15,7 +15,7 @@ INLINE void esperaHseListo(void){
 INLINE void seleccionaHse(void){
     RCC->CFGR = (RCC->CFGR & ~CFGR_SW_MASK) | CFGR_SW_HSE;}
 INLINE void esperaImpacteSeleccionHse(void){
-    while ((RCC->CFGR & CFGR_SW_ACTIVO_MASK) == CFGR_SW_ACTIVO_HSE)continue;}
+    while (!((RCC->CFGR & CFGR_SW_ACTIVO_MASK) == CFGR_SW_ACTIVO_HSE))continue;}
 INLINE void confHPRE(void){
     RCC->CFGR &= ~(1<<7);}
 INLINE void confPPRE1(void){
