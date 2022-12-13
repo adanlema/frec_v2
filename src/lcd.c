@@ -65,7 +65,6 @@ void lcd_escribir(unsigned char *Data, unsigned char fila, unsigned char col){
         lcd_escribir_byte(*Data);
         Data++;}}
 
-
 void lcd_inicio(void){ //Rutina para iniciar el LCD.
     RCC->APB2ENR |= (0b11<<2);
     GPIOA->CRL = 0x22222222;
@@ -73,6 +72,7 @@ void lcd_inicio(void){ //Rutina para iniciar el LCD.
     GPIOB->BRR |= (0b11<<10);
     delay_ms(2000);
     //SET
+    GPIOA->BRR |= 0xff;
     GPIOA->BSRR |= 0b111000;
     GPIOB->BSRR |= (1<<10);
     delay_ms(3000);
