@@ -7,13 +7,13 @@
 
 INLINE void comando_RS(bool rs){
     if(rs) GPIOB->BSRR |= (1<<11);
-    else   GPIOB->BSRR |= (1<<27);}
+    else   GPIOB->BRR  |= (1<<11);}
 INLINE void comando_EN(uint8_t delay){
     GPIOB->BSRR |= (1<<10);
     delay_ms(delay);
-    GPIOB->BSRR |= (1<<26);}
+    GPIOB->BRR |= (1<<10);}
 INLINE void bits_NULL(void){
-    GPIOA->BSRR |= (0xFF<<16);}
+    GPIOA->BRR |= (0xff);}
 
 
 static void lcd_escribir_byte(unsigned char Data){
