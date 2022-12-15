@@ -3,12 +3,12 @@
 dos canales y debe mostrar el valor de la frecuencia en un lcd1602. Utilizamos los pines de la
 placa de desarrolo bluepill:
 
-PA8,PA9     -> TIM1 CH1 y CH2
+PA8 -> TIM1_CH1 ; PA9 -> TIM1_CH2
 PA0-7   -> Bits de datos
-PB10-11 -> Enable y RS
+PB10 -> Enable ; PB11 -> RS
 
 USART usamos:
-PB6,PB7  -> USART1
+UART1: PB6 -> Tx ; PB7 -> Rx
 
     Usaremos el TIM1 para la medicion de la frecuencia de la señal y el TIM6 para realizar retardos
 de tiempo precisos.

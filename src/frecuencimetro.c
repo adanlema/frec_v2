@@ -72,22 +72,24 @@ void frecuencimetro_init(void)
 {
     inicializa__Puerto();
     inicializa__Timer();
+    NVIC_EnableIRQ(TIM1_CC_IRQn);
 }
 
 
 typedef struct{
-    int32_t anterior;
+    uint32_t anterior;
     bool anterior_valido;
     bool lectura_valida;
-    int32_t diferencia;
-    int32_t frecuencia;
+    uint32_t diferencia;
+    uint32_t frecuencia;
 } estado_Canal;
 
-estado_Canal CH1 = {0,false,false,0,0};
-estado_Canal CH2 = {0,false,false,0,0};
+volatile estado_Canal CH1 = {0,false,false,0,0};
+volatile estado_Canal CH2 = {0,false,false,0,0};
 
 void TIM1_CC_IRQHandler(void)
 {
+
     //debemos configurar nuestro programa, donde debemos leer de TIMX_CCR1.
     if (TIM1->SR & (1<<1)){
         if (CH1.anterior_valido == false){
@@ -98,8 +100,10 @@ void TIM1_CC_IRQHandler(void)
             CH1.diferencia = actual1 - CH1.anterior;
             CH1.frecuencia = 400000 / CH1.diferencia;
             CH1.anterior = actual1;
-            if(CH1.frecuencia < 5) CH1.lectura_valida = false;
-            else CH1.lectura_valida = true; } 
+            // if(CH1.frecuencia < 6)
+            //     CH1.lectura_valida = false;
+            // else
+                CH1.lectura_valida = true; } 
         TIM1->SR = (TIM1->SR & ~(1<<1));}
     
     if (TIM1->SR & (1<<2)){
@@ -111,9 +115,12 @@ void TIM1_CC_IRQHandler(void)
             CH2.diferencia = actual2 - CH2.anterior;
             CH2.frecuencia = 400000 / CH2.diferencia;
             CH2.anterior = actual2;
-            if(CH2.frecuencia < 5) CH2.lectura_valida = false;
-            else CH2.lectura_valida = true;}
-        TIM1->SR = (TIM1->SR & ~(1<<2));}
+            // if(CH2.frecuencia < 6) 
+            //     CH2.lectura_valida = false;
+            // else 
+                CH2.lectura_valida = true;}
+        TIM1->SR = (TIM1->SR & ~(1<<2));
+        }
 }
 
 Lectura frecuencimetro_get_frecuencia1(void){

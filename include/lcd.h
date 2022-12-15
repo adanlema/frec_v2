@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 void lcd_clear(void);
-void lcd_escribir(unsigned char *Data, unsigned char fila, unsigned char col);
+void lcd_escribir(const char *Data, unsigned char fila, unsigned char col);
 void lcd_inicio(void);
 void lcd_init(void);
 #endif

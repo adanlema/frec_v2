@@ -55,7 +55,7 @@ void lcd_clear(void){
     GPIOB->BRR |= (1<<10);
     GPIOA->BRR |= 0xff;}
 
-void lcd_escribir(unsigned char *Data, unsigned char fila, unsigned char col){
+void lcd_escribir(const char *Data, unsigned char fila, unsigned char col){
     unsigned char cursor = 0x00;
     if(fila)    cursor = 0xc0;
     else        cursor = 0x80;
