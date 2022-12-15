@@ -52,14 +52,6 @@ int main(void){
     reloj_init();
     tim2_init();
     Interprete_init(&interp);
-    /* //Rutina para encender el LED_C13
-    RCC->APB2ENR |= (1<<4);
-    GPIOC->CRH = (GPIOC->CRH & ~(0xF << 20)) | (2<<20);
-    while(1){
-            GPIOC->BSRR |= (1<<13);
-            delay_ms(3000);
-            GPIOC->BRR |= (1<<13);
-            delay_ms(1000);} */
     
     lcd_inicio();
     lcd_escribir("Frecuencimetro",0,0);
@@ -68,24 +60,20 @@ int main(void){
     lcd_clear();
 
     frecuencimetro_init();
-    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
-    GPIOB->CRL = (GPIOB->CRL & ~(0xf << (1*4))) | (0x2 << (1*4));
-    GPIOB->BSRR |= (1<<1);
     usart_config();
-    GPIOB->BRR  |= (1<<1); 
+    usart3_config();
     lcd_escribir("Frec1: ",0,0);
     lcd_escribir("Frec2: ",1,0);
 
     char F1[10]; 
-    char F2[10];
-    //  protothreads                        <- maquina estado finita, sencilla y aplicable       
-    usart_sendstring("F1 | F2 para leer canales\r\n");
+    char F2[10];     
+    //usart_sendstring("F1 | F2 para leer canales\r\n");
     while(1){
+        usart3_sendstring("Hola");
         Interprete_paso(&interp);
         const char * n_a = "N/A      ";
         const Lectura frec_CH1 = frecuencimetro_get_frecuencia1();
         const Lectura frec_CH2 = frecuencimetro_get_frecuencia2();
-        //const PuertoU U1 = uart_transmitir(); 
         if (frec_CH1.valida){
             snprintf(F1,sizeof(F1),"%-9lu",frec_CH1.valor);
             lcd_escribir(F1,0,7);
@@ -98,18 +86,18 @@ int main(void){
         }else{
             lcd_escribir(n_a,1,7);}
 
-        // if (interp.estado == E_T){
-        //     switch (interp.canal){
-        //     break;case 1:
-        //         usart_sendstring(F1);
-        //     break;case 2:
-        //         usart_sendstring(F2);
-        //     break;default:
-        //         (void)0;
-        //     }
-        //     usart_sendstring("\r\n");
-        //     interp.transmitido=true;
-        // }
+        if (interp.estado == E_T){
+            switch (interp.canal){
+            break;case 1:
+                usart_sendstring(F1);
+            break;case 2:
+                usart_sendstring(F2);
+            break;default:
+                (void)0;
+            }
+            usart_sendstring("\r\n");
+            interp.transmitido=true;
+        }
     }
     return 0;
 }

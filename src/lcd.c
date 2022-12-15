@@ -6,12 +6,12 @@
 
 
 INLINE void comando_RS(bool rs){
-    if(rs) GPIOB->BSRR |= (1<<11);
-    else   GPIOB->BRR  |= (1<<11);}
+    if(rs) GPIOB->BSRR |= (1<<1);
+    else   GPIOB->BRR  |= (1<<1);}
 INLINE void comando_EN(uint8_t delay){
-    GPIOB->BSRR |= (1<<10);
+    GPIOB->BSRR |= (1<<0);
     delay_ms(delay);
-    GPIOB->BRR |= (1<<10);}
+    GPIOB->BRR |= (1<<0);}
 INLINE void bits_NULL(void){
     GPIOA->BRR |= (0xff);}
 
@@ -47,12 +47,12 @@ INLINE void comando_encenderlcd(void){
 
 
 void lcd_clear(void){
-    GPIOB->BRR |= (1<<11);
+    GPIOB->BRR |= (1<<1);
     GPIOA->BRR |= (0xff);
     GPIOA->BSRR |= 1;
-    GPIOB->BSRR |= (1<<10);
+    GPIOB->BSRR |= (1<<0);
     delay_ms(1);
-    GPIOB->BRR |= (1<<10);
+    GPIOB->BRR |= (1<<0);
     GPIOA->BRR |= 0xff;}
 
 void lcd_escribir(const char *Data, unsigned char fila, unsigned char col){
@@ -68,21 +68,21 @@ void lcd_escribir(const char *Data, unsigned char fila, unsigned char col){
 void lcd_inicio(void){ //Rutina para iniciar el LCD.
     RCC->APB2ENR |= (0b11<<2);
     GPIOA->CRL = 0x22222222;
-    GPIOB->CRH = (GPIOB->CRH & ~(0xFF << 8)) | (0x22 << 8);    
-    GPIOB->BRR |= (0b11<<10);
-    delay_ms(2000);
+    GPIOB->CRL = (GPIOB->CRL & ~(0xFF << 0)) | (0x22 << 0);    
+    GPIOB->BRR |= (0b11<<0);
+    delay_ms(100);
     //SET
     GPIOA->BRR |= 0xff;
     GPIOA->BSRR |= 0b111000;
-    GPIOB->BSRR |= (1<<10);
-    delay_ms(3000);
-    GPIOB->BRR |= (1<<10);
+    GPIOB->BSRR |= (1<<0);
+    delay_ms(100);
+    GPIOB->BRR |= (1<<0);
     GPIOA->BRR |= 0xff;
     //DISPLAY ON/OFF
     GPIOA->BSRR |= 0b1100; //0b1111
-    GPIOB->BSRR |= (1<<10);
-    delay_ms(3000);
-    GPIOB->BRR |= (1<<10);
+    GPIOB->BSRR |= (1<<0);
+    delay_ms(100);
+    GPIOB->BRR |= (1<<0);
     GPIOA->BRR |= 0xff;
     lcd_clear();}
 

@@ -89,7 +89,6 @@ volatile estado_Canal CH2 = {0,false,false,0,0};
 
 void TIM1_CC_IRQHandler(void)
 {
-
     //debemos configurar nuestro programa, donde debemos leer de TIMX_CCR1.
     if (TIM1->SR & (1<<1)){
         if (CH1.anterior_valido == false){
@@ -100,10 +99,7 @@ void TIM1_CC_IRQHandler(void)
             CH1.diferencia = actual1 - CH1.anterior;
             CH1.frecuencia = 400000 / CH1.diferencia;
             CH1.anterior = actual1;
-            // if(CH1.frecuencia < 6)
-            //     CH1.lectura_valida = false;
-            // else
-                CH1.lectura_valida = true; } 
+            CH1.lectura_valida = true; } 
         TIM1->SR = (TIM1->SR & ~(1<<1));}
     
     if (TIM1->SR & (1<<2)){
@@ -115,10 +111,7 @@ void TIM1_CC_IRQHandler(void)
             CH2.diferencia = actual2 - CH2.anterior;
             CH2.frecuencia = 400000 / CH2.diferencia;
             CH2.anterior = actual2;
-            // if(CH2.frecuencia < 6) 
-            //     CH2.lectura_valida = false;
-            // else 
-                CH2.lectura_valida = true;}
+            CH2.lectura_valida = true;}
         TIM1->SR = (TIM1->SR & ~(1<<2));
         }
 }

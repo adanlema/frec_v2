@@ -18,10 +18,13 @@ the USART is disabled or enters the Halt mode to avoid corrupting the last trans
 #define INLINE inline __attribute__((always_inline))
 
 INLINE void usart_confPIN(void){
-    RCC->APB2ENR |= (1<<14) | (1<<3) | (1<<0);
-    AFIO->MAPR |= (1<<2);                                       // PB6 ^ PB7 para la USART1
-    GPIOB->CRL = (GPIOB->CRL & ~(0xf<<(4*6))) | (0b1010<<(4*6));      // PB6 TX - push-pull
+    RCC->APB2ENR |= ((RCC_APB2ENR_AFIOEN | RCC_APB2ENR_IOPBEN | RCC_APB2ENR_USART1EN));            
+    AFIO->MAPR |= AFIO_MAPR_I2C1_REMAP;
+    AFIO->MAPR |= AFIO_MAPR_USART1_REMAP;                           // PB6 ^ PB7 para la USART1
+    GPIOB->CRL = (GPIOB->CRL & ~(0xf<<(4*6))) | (0b1010<<(4*6));    // PB6 TX - push-pull
     GPIOB->CRL = (GPIOB->CRL & ~(0xf<<(4*7))) | (0b0100<<(4*7));    // PB7 RX - entrada flotante
+    
+
 }
 INLINE void usart_enable(void){
     USART1->CR1 |= (1<<13);
@@ -34,7 +37,8 @@ INLINE void usart_1bitstop(void){
 }
 INLINE void usart_baudrate(void){
     SystemCoreClockUpdate();
-    USART1->BRR = (SystemCoreClock*16)/(115200*16);//(1<<0) | (0x34<<4);
+    USART1->BRR = (5<<0)|(4<<4);
+    //USART1->BRR = (SystemCoreClock*16)/(115200*16);//(1<<0) | (0x34<<4);
 }
 INLINE void usart_TEandRX(void){
     USART1->CR1 |= (1<<3);                                      // Habilitar Transmision
@@ -52,7 +56,6 @@ void usart_config(void){
     usart_1bitstop();
     usart_baudrate();
     usart_TEandRX();
-    
     while(!usart_tx_empty());
 }
 
@@ -62,7 +65,6 @@ INLINE void usart_sendchar(char data){
 }
 
 void usart_sendstring(const char *palabra){
-    //while (*palabra) usart_sendchar(*palabra++)
     while(*palabra != '\0'){
         usart_sendchar(*palabra);
         palabra++;
@@ -82,12 +84,7 @@ Opt_uint8_t usart_opt_getchar(void){
     if (!(USART1->SR & USART_SR_RXNE)){
         return (Opt_uint8_t){.valido = false}; // No hay nada 
     }
-    // if (GPIOB->ODR & (1<<1)) GPIOB->BRR |= (1<<1);
-    // else GPIOB->BSRR |= (1<<1);
-
     return (Opt_uint8_t){.valido = true,
                          .valor = (uint8_t)USART1->DR};
 }
 
-
-//void USART1_IRQHandler (void){}
