@@ -11,7 +11,7 @@ typedef struct Interprete {
 
 void Interprete_paso(Interprete *self)
 {
-    Opt_uint8_t rx = usart_opt_getchar();
+    Opt_uint8_t rx = usart3_opt_getchar();
     switch (self->estado)
     {
         break;case E_INICIO:
@@ -60,7 +60,7 @@ int main(void){
     lcd_clear();
 
     frecuencimetro_init();
-    usart_config();
+    //usart_config();
     usart3_config();
     lcd_escribir("Frec1: ",0,0);
     lcd_escribir("Frec2: ",1,0);
@@ -70,8 +70,8 @@ int main(void){
     usart3_sendstring("F1 | F2 para leer canales\r\n");
     delay_ms(1000);
     while(1){
-        usart3_sendstring("Hola");
-        delay_ms(1000);
+        // usart3_sendstring("Hola");
+        // delay_ms(1000);
         Interprete_paso(&interp);
         const char * n_a = "N/A      ";
         const Lectura frec_CH1 = frecuencimetro_get_frecuencia1();
@@ -91,15 +91,21 @@ int main(void){
         if (interp.estado == E_T){
             switch (interp.canal){
             break;case 1:
-                usart_sendstring(F1);
+                usart3_sendstring(F1);
             break;case 2:
-                usart_sendstring(F2);
+                usart3_sendstring(F2);
             break;default:
                 (void)0;
             }
-            usart_sendstring("\r\n");
+            usart3_sendstring("\r\n");
             interp.transmitido=true;
         }
+        /*
+        uint8_t recibir = usart3_getchar();
+        if(recibir == 'F'){
+            usart3_sendstring(F1);
+            delay_ms(1000);
+        }*/
     }
     return 0;
 }

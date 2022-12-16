@@ -78,6 +78,7 @@ uint8_t usart_getchar(void){
     return datousart;
 }
 
+/*
 // si valido==true entonces valor es el valor uint8_t, si valido==false entonces no hay valor
 
 Opt_uint8_t usart_opt_getchar(void){
@@ -88,3 +89,4 @@ Opt_uint8_t usart_opt_getchar(void){
                          .valor = (uint8_t)USART1->DR};
 }
 
+*/
