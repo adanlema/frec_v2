@@ -67,9 +67,11 @@ int main(void){
 
     char F1[10]; 
     char F2[10];     
-    //usart_sendstring("F1 | F2 para leer canales\r\n");
+    usart3_sendstring("F1 | F2 para leer canales\r\n");
+    delay_ms(1000);
     while(1){
         usart3_sendstring("Hola");
+        delay_ms(1000);
         Interprete_paso(&interp);
         const char * n_a = "N/A      ";
         const Lectura frec_CH1 = frecuencimetro_get_frecuencia1();
