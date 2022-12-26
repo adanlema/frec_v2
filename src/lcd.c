@@ -87,16 +87,7 @@ void lcd_inicio(void){ //Rutina para iniciar el LCD.
     lcd_clear();}
 
 
-void lcd_init(void){
-    /*lcd_conf();
-    delay_ms(100);
-    reiniciar_lcd();
-    comando_set();
-    comando_show();
-    comando_clear();
-    comando_confModoEntrada();
-    comando_encenderlcd();
-    */}
+
 
 
 

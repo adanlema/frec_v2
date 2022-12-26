@@ -82,6 +82,7 @@ typedef struct{
     bool lectura_valida;
     uint32_t diferencia;
     uint32_t frecuencia;
+    uint32_t decimal;
 } estado_Canal;
 
 volatile estado_Canal CH1 = {0,false,false,0,0};
@@ -98,6 +99,7 @@ void TIM1_CC_IRQHandler(void)
             uint32_t actual1 = TIM1->CCR1;
             CH1.diferencia = actual1 - CH1.anterior;
             CH1.frecuencia = 400000 / CH1.diferencia;
+            CH1.decimal = (4000000/CH1.diferencia) - (10 * CH1.frecuencia);
             CH1.anterior = actual1;
             CH1.lectura_valida = true; } 
         TIM1->SR = (TIM1->SR & ~(1<<1));}
@@ -117,7 +119,7 @@ void TIM1_CC_IRQHandler(void)
 }
 
 Lectura frecuencimetro_get_frecuencia1(void){
-    return (Lectura){.valida = CH1.lectura_valida,.valor = CH1.frecuencia};}
+    return (Lectura){.valida = CH1.lectura_valida,.valor = CH1.frecuencia,.decimal=CH1.decimal};}
 
 Lectura frecuencimetro_get_frecuencia2(void){
-    return (Lectura){.valida = CH2.lectura_valida,.valor = CH2.frecuencia};}
+    return (Lectura){.valida = CH2.lectura_valida,.valor = CH2.frecuencia,.decimal=0};}

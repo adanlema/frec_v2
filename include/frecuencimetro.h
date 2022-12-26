@@ -7,6 +7,7 @@
 typedef struct Lectura{
     bool valida;
     uint32_t valor;
+    uint32_t decimal;
 }Lectura;
 
 

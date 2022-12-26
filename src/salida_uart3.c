@@ -93,3 +93,45 @@ Opt_uint8_t usart3_opt_getchar(void){
     return (Opt_uint8_t){.valido = true,
                          .valor = (uint8_t)USART3->DR};
 }
+
+
+
+
+void Interprete_paso(Interprete *self)
+{
+    Opt_uint8_t rx = usart3_opt_getchar();
+    switch (self->estado)
+    {
+        break;case E_INICIO:
+            if (rx.valido && rx.valor == 'F') {
+                self->estado = E_F;
+            }
+        break;case E_F:
+            if (rx.valido){
+                switch (rx.valor){
+                    break;case '1':
+                        self->estado = E_T;
+                        self->canal = 1;
+                        self->transmitido = false;
+                    break;case '2':
+                        self->estado = E_T;
+                        self->canal = 2;
+                        self->transmitido = false;
+                    break;default:
+                        self->estado = E_INICIO;
+                }
+            }
+        break;case E_T:
+            if (self->transmitido){
+                self->estado = E_INICIO;
+            }
+        break;default:
+            self->estado = E_INICIO;
+    }
+}
+
+void Interprete_init(Interprete *self){
+    self->estado = E_INICIO;
+    self->canal = 0;
+    self->transmitido = false;
+}
