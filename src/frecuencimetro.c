@@ -118,7 +118,7 @@ void TIM1_CC_IRQHandler(void)
             }
         else {
             uint32_t actual2 = TIM1->CCR2;
-            CH2.diferencia = actual2 - CH2.anterior;
+            CH2.diferencia = actual2 - CH2.anterior  + (CH2.over * 65536);
             CH2.frecuencia = 400000 / CH2.diferencia;
             CH2.decimal = (4000000/CH2.diferencia) - (10 * CH2.frecuencia);
             CH2.anterior_valido = false;
