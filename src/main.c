@@ -57,12 +57,6 @@ int main(void){
             usart3_sendstring("\r\n");
             interp.transmitido=true;
         }
-        
-        // uint8_t recibir = usart3_getchar();
-        // if(recibir == 'F'){
-        //     usart3_sendstring(F1);
-        //     delay_ms(1000);
-        //}
     }
     return 0;
 }

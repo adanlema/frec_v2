@@ -8,7 +8,6 @@
 #include "frecuencimetro.h"
 #include <lcd.h>
 #include <delay.h>
-#include <salida_uart.h>
 #include <salida_uart3.h>
 
 

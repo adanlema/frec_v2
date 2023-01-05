@@ -1,7 +1,8 @@
     # Frecuencimetro de dos Canales
-    El proyecto consiste en realizar un frecuencimetro con el micro STM32f103, el cual debe contener
-dos canales y debe mostrar el valor de la frecuencia en un lcd1602. Utilizamos los pines de la
-placa de desarrolo bluepill:
+    El proyecto de la materia Señales Electricas a cargo del Dr. Ing. Carlos Manuel Formigli,
+consiste en realizar un frecuencimetro con el micro STM32f103, el cual debe contener dos canales
+y debe mostrar el valor de la frecuencia en un lcd1602. Utilizamos los pines de la placa de 
+desarrolo bluepill:
 
 lcd1602: 
     PA0-7 -> Bits de datos
@@ -11,8 +12,8 @@ TIM1:
     PA8 -> CHANNEL1 
     PA9 -> CHANNEL2
 USART usamos:
-    PB6 -> Tx
-    PB7 -> Rx
+    PB10 -> Tx
+    PB11 -> Rx
 
     Usaremos el TIM1 para la medicion de la frecuencia de la señal y el TIM6 para realizar retardos
 de tiempo precisos.

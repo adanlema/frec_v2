@@ -26,10 +26,8 @@ INLINE void habilitarContador(void){
 INLINE void conexionCHANNELTIM1(void){
     TIM1->CR2 &= ~TIM_CR2_TI1S;}
 INLINE void confParametros(void){
-    //TIM1->CNT = 0;
     TIM1->PSC = 20-1;
     TIM1->ARR = 0xffff;
-    //TIM1->RCR = 0;
     }
 INLINE void conf_Registros(void){
     habilitarTIM1();
@@ -105,10 +103,9 @@ void TIM1_CC_IRQHandler(void)
             CH1.diferencia = actual1 - CH1.anterior + (CH1.over * 65536);
             CH1.frecuencia = 400000 / CH1.diferencia;
             CH1.decimal = (4000000/CH1.diferencia) - (10 * CH1.frecuencia);
-            //CH1.anterior = actual1;
             CH1.anterior_valido = false;
-            CH1.over = 0;
             CH1.lectura_valida = true; 
+            CH1.over = 0;
             } 
         TIM1->SR = (TIM1->SR & ~(1<<1));
         }
@@ -124,10 +121,9 @@ void TIM1_CC_IRQHandler(void)
             CH2.diferencia = actual2 - CH2.anterior;
             CH2.frecuencia = 400000 / CH2.diferencia;
             CH2.decimal = (4000000/CH2.diferencia) - (10 * CH2.frecuencia);
-            //CH2.anterior = actual2;
             CH2.anterior_valido = false;
-            CH2.over = 0;
             CH2.lectura_valida = true;
+            CH2.over = 0;
             }
         TIM1->SR = (TIM1->SR & ~(1<<2));
         }
@@ -143,7 +139,9 @@ void TIM1_UP_IRQHandler (void)
 }
 
 Lectura frecuencimetro_get_frecuencia1(void){
-    return (Lectura){.valida = CH1.lectura_valida,.valor = CH1.frecuencia,.decimal=CH1.decimal};}
+    return (Lectura){.valida = CH1.lectura_valida,.valor = CH1.frecuencia,.decimal=CH1.decimal};
+    }
 
 Lectura frecuencimetro_get_frecuencia2(void){
-    return (Lectura){.valida = CH2.lectura_valida,.valor = CH2.frecuencia,.decimal=CH2.decimal};}
+    return (Lectura){.valida = CH2.lectura_valida,.valor = CH2.frecuencia,.decimal=CH2.decimal};
+    }

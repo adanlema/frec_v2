@@ -4,28 +4,13 @@
 #include "delay.h"
 #define INLINE inline __attribute__((always_inline))
 
-
-INLINE void tim2_enable(void){
-    RCC->APB1ENR |= (1<<0);}
-INLINE void tim2_delay1us(void){
-    TIM2->PSC = 8-1;
-    TIM2->ARR = 0xffff;    }
-INLINE void tim2_enableCounter(void){
-    TIM2->CR1 |= (1<<0);}
-
-static void tim2_conf(void){
-    tim2_enable();
-    tim2_delay1us();
-    tim2_enableCounter();
-    while(!(TIM2->SR & (1<<0)));}
-
-
-
-
 void tim2_init(){
-    tim2_conf();}
-
-
+    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+    TIM2->PSC = 8-1;
+    TIM2->ARR = 0xffff;
+    TIM2->CR1 |= TIM_CR1_CEN;
+    while(!(TIM2->SR & (1<<0)));
+    }
 
 void delay_us(uint16_t us){
     TIM2->CNT = 0;

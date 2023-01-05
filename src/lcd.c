@@ -20,30 +20,14 @@ static void lcd_escribir_byte(unsigned char Data){
     comando_RS(true);
     bits_NULL();
     GPIOA->BSRR |= Data;
-    comando_EN(1);}
+    comando_EN(1);
+    }
 INLINE void lcd_comand_escribir(unsigned char Data, uint8_t delay){
     comando_RS(false);
     bits_NULL();
     GPIOA->BSRR |= Data;
-    comando_EN(delay);}
-
-
-
-INLINE void reiniciar_lcd(void){
-    lcd_comand_escribir(0x30,10);
-    comando_EN(1);
-    comando_EN(1);}
-INLINE void comando_set(void){
-    lcd_comand_escribir(0x38,1);}
-INLINE void comando_show(void){
-    lcd_comand_escribir(0x08,1);}
-INLINE void comando_clear(void){
-    lcd_comand_escribir(0x01,1);
-    delay_ms(3);}
-INLINE void comando_confModoEntrada(void){
-    lcd_comand_escribir(0x07,1);}
-INLINE void comando_encenderlcd(void){
-    lcd_comand_escribir(0x0d,1);}
+    comando_EN(delay);
+    }
 
 
 void lcd_clear(void){
